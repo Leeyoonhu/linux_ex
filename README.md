@@ -1,0 +1,3 @@
+# linux_ex
+this is README from hyukki
+since when I was 7 years old....started playing soccer to become a player like boom boom-Cha...
