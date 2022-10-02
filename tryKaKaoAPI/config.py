@@ -8,9 +8,3 @@
 CLIENT_ID = "d23a3184f03474573dded85b7450aa27"
 CLIENT_SECRET = "kVbMBj8DEwjCkYOIHhxzS94vOUFshJTy"
 REDIRECT_URI = "http://localhost:8000/"
-
-
-# 사용자의 service page 접근
-@app.route("/")
-def index():
-    return render_template('index.html')
