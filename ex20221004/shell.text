@@ -1,0 +1,53 @@
+** shell 의 개념 **
+    - 명령과 프로그램 실행 시 사용하는 인터페이스
+    - 사용자가 입력한 명령 해석하여 커널에 전달하는 역할
+    - Ubuntu에서 기본적으로 사용하는 shell 은 bashshell임
+
+* bashshell 특징
+    - alias 
+    - history (방향키 위, 아래)
+    - 연산, Job Control 기능
+    - 자동 이름 완성 기능 (tab)
+    - prompt 제어 기능
+    - 명령 편집 기능
+
+
+* shell script 작성
+    - 일반 프로그래밍 언어처럼 변수, 반복문, 제어문 사용
+    - 별도의 컴파일 없이 텍스트 파일 형태로 shell에서 바로 실행
+    - shell script 는 주로 vi editer나 gedit으로 작성
+
+
+* gedit name.sh 명령 실행
+    ex) 
+        $ gedit name.sh 생성 (/home/user1/myJob에 작성)
+        - 작성 -
+            #!/bin/sh
+            echo "user name : " $USER
+            echo "home dir : " $HOME
+            exit 0
+        - 작성 종료 -
+        sh name.sh => sh 명령으로 실행 
+        - '실행 가능' 속성으로 변경 후 실행하면 sh 명령어 없이 실행 가능
+        - shell script 파일 속성을 '실행 가능' 으로 변경 ($ chmod +x name.sh)
+        - $ ./name.sh 로 실행
+
+    - 1행 : 첫행에 반드시 써야 하며, 특별한 형태의 주석(#!)으로 bashshell을 사용하겠다는 의미
+    - 2행 : echo 는 화면에 출력하는 명령어 먼저 "user name : "이라는 글자를 출력하고, 옆에 $USER라는 환경 변수 출력
+    - 3행 : "home dir : "라는 글자를 출력하고, 옆에 $HOME 이라는 환경 변수 출력
+    - 4행 : 종료 코드를 반환, 0은 성공적으로 종료되었음을 의미
+
+
+* 변수 (variable)
+    - 변수 대입할때 '=' 앞 뒤에 공백이 없어야 함
+    - 변수에 들어가는 모든 값은 문자열(String) 취급
+    - 변수에 대입되는 값이 공백이 들어갈 경우, "" 로 묶어주어야 함
+    - 계산된 값을 넣을 수 없음
+
+    ex) $ myVar = Hello (X) // $ myVar=Hello (O)
+    ex) $ myVar=Hello World (X) // $ myVar="Hello World" (O)
+    ex) 계산된 결과가 나오니?
+        $ myVar=7+5
+        $ echo $myVar >> 7+5
+        '7+5'로 인식됨을 알 수 있다
+    
