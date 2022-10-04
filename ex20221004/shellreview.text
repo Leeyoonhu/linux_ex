@@ -1,0 +1,184 @@
+** p.328 ~ p.343 (예제 13-10 ~ 예제 13-18) **
+
+ex) 예제 13-10 // 키보드로 100 과 200을 입력받아 변수에 저장한 후, +, *, /, avg값을 산출하여 출력하기
+$ gedit arithmetic.sh
+    -- 작성 --
+        #!/bin/sh
+        echo " >> first : "
+        read a
+        echo " >> second : "
+        read b
+        echo " >> a = $a, b = $b "
+
+        add=`expr $a + $b`
+        mul=`expr $a \* $b`
+        div=`expr $a / $b`
+        avg=`expr $add / 2`
+        echo " a + b = $add \n a * b = $mul \n a / b = $div \n avg = $avg"
+        exit 0
+    -- 작성 완료 --
+$ sh arithmetic.sh 실행
+
+
+ex) 예제 13-11 // key - value 매핑하기 (parameter)
+$ gedit mapping.sh
+    -- 작성 --
+        #!/bin/sh
+
+        echo " >> One : $0 "
+        echo " >> Two : $1 "
+        echo " >> Three : $2 "
+        echo " >> Total : $* "
+
+        exit 0
+    -- 작성 완료 --
+$ sh mapping.sh 35 87 text_string 실행
+    >> One : mapping.sh ($0 => fileName)
+    >> Two : 35 ($1)
+    >> Three : 87 ($2)
+    >> Total : 35 87 text_string ($1부터 포함된 전체)
+
+
+ex) 도전 13-02 // 
+    1. $ gedit test_1302.sh
+    2. read su1, su2 def
+    3. su1=23, su2=56입력
+    4. 두 수의 곱을 gob에 저장
+    5. 키보드로 입력받은 값 출력
+    6. 두 수의 곱셈 연산과 결과값 출력
+
+    -- 작성 --
+        #!/bin/sh
+
+        echo "su1 >> "
+        read su1
+        echo "su2 >> "
+        read su2
+        gob=`expr $su1 \* $su2`
+        echo "su1 * su2 = $gob"
+        exit 0
+    -- 작성 완료 --
+    $ sh test_1302.sh
+
+
+ex) 예제 13-12 if 조건문
+    $ gedit basicif.sh
+    -- 작성 --
+        #!/bin/sh
+
+        if [ "space" = "space" ]
+        then
+        echo " >> compare : space = space ?? "
+        echo " >> result : true "
+        fi
+
+        exit 0
+    -- 작성 완료 --
+    $ sh basicif.sh
+
+
+ex) 예제 13-13 if-else 조건문
+    $ gedit ifelse_01.sh
+    -- 작성 --
+        #!/bin/sh
+
+        echo " >> compare : space != space ?? "
+        if [ "space" != "space" ]
+        then
+        echo " >> result : true "
+        else
+        echo " >> result : false "
+        fi
+
+        exit 0
+    -- 작성 완료 --
+    $ sh ifelse_01.sh
+
+
+ex) 예제 13-14 산술 비교 연산자
+    $ gedit ifelse_02.sh
+    -- 작성 --
+        #!/bin/sh
+
+        echo " >> compare : 300 -gt 800 ?? "
+        if [ 300 -gt 800 ]
+        then 
+        echo " >> result : true "
+        else
+        echo " >> result : false "
+        fi
+
+        exit 0
+    -- 작성 완료 --
+    $ sh ifelse_02.sh
+
+
+ex) 예제 13-15 파일 관련 조건
+    $ gedit ifelse_03.sh
+    -- 작성 --
+        #!/bin/sh
+
+        sample=/lib/systemd/system/udev.service
+        if [ -f $sample ]
+        then
+        echo " >> result : true "
+        head -3 $sample
+        else
+        echo " >> result : false "
+        fi
+
+        exit 0
+    -- 작성 완료 --
+    $ sh ifelse03.sh
+
+
+ex) 예제 13-16 case~esac 문
+    $ gedit case_01.sh
+    -- 작성 --
+        #!/bin/sh
+
+        echo " >> season choice : Spring / Summer / Fall / Winter "
+        case "$S1" in
+        Spring)
+        echo " >> choice : Spring ";;
+        Summer)
+        echo " >> choice : Summer ";;
+        Fall)
+        echo " >> choice : Fall ";;
+        Winter)
+        echo " >> choice : Winter ";;
+        *)
+        echo " No choice ~ ";;
+        esac
+
+        exit 0
+    -- 작성 완료 --
+    $ sh case_01.sh Spring 실행
+
+
+ex) 예제 13-17 조건문에서의 case~esac 2
+    $ gedit case_02.sh
+    -- 작성 --
+        #!/bin/sh
+
+        echo " >> state choice : (Yes / No / Y / N) "
+        read mind
+        case $mind in
+            Yes | YES | yes | Y | y)
+            echo " >> choice : Yes "
+            echo " >> result : Linux Master ";;
+            [nN]*)
+            echo " >> choice : No "
+            echo " >> result : Good Luck~ ";;
+            *)
+            echo " >> choice error !! ";;
+        esac
+
+        exit 0
+    -- 작성 완료 --
+    $ sh case_02.sh
+
+
+ex) 예제 13-18 조건문에서의 관계 연산자
+    $ gedit ifandor.sh
+    
