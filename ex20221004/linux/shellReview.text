@@ -181,4 +181,53 @@ ex) 예제 13-17 조건문에서의 case~esac 2
 
 ex) 예제 13-18 조건문에서의 관계 연산자
     $ gedit ifandor.sh
-    
+    -- 작성 --
+        #!/bin/sh
+
+        echo " >> search name : "
+        read file_name
+        if [ -f $file_name ] && [ -s $file_name ] ;
+        then 
+            echo " >> file select : $file_name "
+            head -3 $file_name
+        else
+            echo " >> search file : $file_name "
+            echo " >> file not found "
+        fi
+
+        exit 0
+    -- 작성 완료 --
+    $ sh ifandor.sh
+
+
+ex) 도전 13-03
+    1. 스크립트 test_1303.sh 작성
+    2. 명령 수행 파라미터 $1 사용
+    3. 혈액형 알파벳 대/소 구별없이 A, B, O, AB
+    4. 혈액형 외의 알파벳은 다시 입력
+    5. 혈액형에 대해서 출력 메세지는 "~형을 선택하였습니다"
+    6. 마지막은 "프로그램을 종료합니다." 출력하기
+
+    $ gedit test_1303.sh
+        -- 작성 --
+            echo "choice : (A / B / O / AB) "
+            read choice
+            case $choice in 
+                [aA])
+                echo "A 형을 선택하였습니다.";;
+                [bB])
+                echo "B 형을 선택하였습니다.";;
+                [oO])
+                echo "O 형을 선택하였습니다.";;
+                [aA][bB])
+                echo "AB 형을 선택하였습니다.";;
+                *)
+                echo "A / B / O / AB 형 중에서 입력해주세요. "
+                read choice;;
+            esac
+            echo "프로그램을 종료합니다."
+            exit 0
+        -- 작성 완료 --
+        
+
+

@@ -1,0 +1,177 @@
+** p.343 ~ p.352 예제 13-19 ~ 13-24 **
+
+ex) 예제 13-19 for문의 기본 문법
+    $ gedit for_01.sh
+        -- 작성 --
+            #!/bin/sh
+
+            cnt=0
+            for num in 1 2 3 4 5
+            do
+            echo " >> No.$cnt : $num "
+            cnt=`expr $cnt + 1`
+            done
+            echo " >> Total count : $cnt "
+
+            exit 0
+        -- 작성 완료 --
+    $ sh for_01.sh 실행
+
+
+ex) 예제 13-20 순차적으로 증가하면서 반복 : seq
+    $ gedit for_02.sh
+        -- 작성 --
+            #!/bin/sh
+
+            cnt=0
+            for num in `seq 21 25`
+            do
+            cnt=`expr $cnt + 1`
+            printf " >> No.%02d : %d \n" $cnt $num
+            done
+            echo " >> Total count : $cnt"
+
+            exit 0
+        -- 작성 종료 --
+    $ sh for_02.sh 실행
+    // printf 에서 출력 지정자 %d 사용
+    // seq : ~부터 ~까지이므로 반드시 `로 묶어야함
+
+
+ex) 예제 13-21 for 문으로 파일 출력 (특정 디렉터리 안의 파일 목록)
+    $ gedit for_03.sh
+        -- 작성 --
+            #!/bin/sh
+
+            for file_list in /tmp/*
+            do
+            echo ${file_list}
+            done
+
+            exit 0
+        -- 작성 종료 --
+    $ sh for_03.sh 실행
+
+
+ex) 예제 13-22 while 문으로 비밀번호 확인(무한 반복)
+    $ gedit while_ex.sh
+        -- 작성 --
+            #!/bin/sh
+
+            echo " >> password : "
+            read password
+            while [ $password != "123456" ]
+
+            do
+            echo " >> password mismatch !! "
+            echo " >> replay : "
+            read password
+
+            done 
+            echo " >> password matching success "
+            echo " >> password entered : $password "
+
+            exit 0
+        -- 작성 종료 --
+    $ sh while_ex.sh 실행
+    // 암호 123456 맞출때까지 무한 반복
+
+
+ex) 예제 13-23 until 문 
+    - 조건식이 항상 거짓일 경우에만 명령을 수행함
+    - 즉 조건식이 참이 되었을 때, 반복문에서 빠져나감
+    - 형식 : 
+        until [ 조건식 ]
+        do
+            조건식이 거짓일 경우 실행
+        done
+            조건식이 참이 되었을 때 실행
+            
+    $ gedit until_ex.sh
+        -- 작성 --
+            #!/bin/sh
+
+            sum=0
+            cnt=5
+            until [ $cnt -gt 30 ]
+
+            do
+            sum=`expr $sum + $cnt`
+            printf " >> No.%02d : %03d \n" $cnt $sum
+            cnt=`expr $cnt + 5`
+
+            done
+            printf " >> Total ... %d \n" $sum
+            exit 0
+        -- 작성 완료 --
+    $ sh until_ex.sh 실행
+    // cnt가 30보다 클 때 (조건식이 참이 될 때) 까지 cnt + 5
+
+
+ex) 예제 13-24 분기문 : break, continue, exit, return
+    $ gedit bcer.sh
+        -- 작성 --
+            #!/bin/sh
+
+            echo " >> choice example : b/c/e or B/C/E "
+            echo " >> b: break, c: continue, e: exit"
+            while [ 1 ]
+
+            do
+            echo " >> choice : "
+            read choice
+            case $choice in 
+            b | B)
+            echo " >> select : break ";
+            break;;
+            c | C)
+            echo " >> select : continue ";
+            continue;;
+            e | E)
+            echo " >> select : exit ";
+            exit 0;;
+            *)
+            echo " >> Input Error !! "
+            continue;;
+            esac;
+
+            done 
+            exit 0	
+        -- 작성 완료 --
+    $ sh bcer.sh 실행
+
+
+ex) 도전 13-04
+    1. 스크립트 test_1304.sh 작성
+    2. while, case~esac 문 사용할 것
+    3. 알파벳 변수선언하여 키보드로 입력받을 것
+    4. 대/소문자 구별 없이 H, S, P, E 를 조건으로 정할 것
+    5. 출력 메세지는 H:처음, S:시작, P:멈춤, E:종료
+    6. H는 continue, P는 break, E는 exit 0
+    7. 이외의 알파벳 입력 시 무한 반복
+
+    $ gedit test_1304.sh
+        -- 작성 --
+            while [ 1 ]
+            echo "(H / S / P / E) 입력 >> "
+            read choice
+            do
+            case $choice in 
+            h | H)
+            echo "H:처음";
+            continue;;
+            s | S)
+            echo "S:시작";;
+            p | P)
+            echo "P:멈춤";
+            break;;
+            e | E)
+            echo "E:종료";
+            exit 1;;
+            *)
+            continue;;
+            esac;
+            done
+            exit 0
+        -- 작성 완료 --
+    $ sh test_1304.sh 로 실행
