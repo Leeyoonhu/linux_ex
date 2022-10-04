@@ -51,3 +51,297 @@
         $ echo $myVar >> 7+5
         '7+5'로 인식됨을 알 수 있다
     
+
+* 변수의 입력과 출력
+    - $가 포함된 글자를 출력하려면, ''로 묶거나 앞에 \를 넣어야 함
+    - ""로 변수를 묶거나 묶지 않아도 출력
+    ex) shell script 작성 후 변수가 어떻게 출력되는지 비교해보기
+        $ gedit var1.sh
+        -- 작성 --
+            #!/bin/sh
+            myvar="Hello World"     
+            echo $myvar
+            echo "$myvar"
+            echo '$myvar'
+            echo \$myvar
+            echo 값 입력:
+            read myvar
+            echo '$myvar'=$myvar
+            exit 0
+        -- 작성 종료 --
+        $ sh var1.sh 로 실행
+        // read myvar에서는 값 입력 필요함
+        // 변수 값 선언할 시 '=' 앞 뒤로 공백 없어야 함!!
+        // 5~6행에서 '', \를 통해 $가 포함된 문자열로 나옴
+
+
+* 변수의 숫자 계산
+    - 변수 값을 연산하기 위해서는 expr keyword 사용
+    - 단, 수식과 함께 백쿼트(`)로 반드시 묶어주어야 함
+    - 수식에 괄호를 사용하려면 반드시 \를 넣어야 함 ==> \(1 + 2 \)
+    - +,-,/ 과 달리 *연산도 예외적으로 앞에 \를 넣어야 함
+    
+    ex) shell script 작성 후 연산 결과 비교해보기
+        $ gedit numcalc.sh
+        -- 작성 --
+            #!/bin/sh
+            num1=100
+            num2=$num1+200
+            echo $num2
+            num3=`expr $num1 + 200`
+            echo $num3
+            num4=`expr \( $num1 + 200 \) / 10 \* 2`
+            echo $num4
+            exit 0
+        -- 작성 종료 --
+        $ sh numcalc.sh 로 실행
+        // ()나 * 앞에는 반드시 \ 필요함
+        // 변수의 연산에는 `expr`이 필요함
+
+
+* Parameter Varibale(파라미터 변수)
+    - 형태 : $0, $1, $2...
+    - $ sudo apt-get -y install gftp 명령의 경우 패러미터 변수를 지정
+    - $0에는 apt-get, $1에는 -y가, $2에는 install이, $3에는 gftp가 저장됨 (spacebar마다 한 파라미터)
+    - 명령 전체의 파라미터 변수는 $*로 표현
+    
+    ex) shell script 작성 후 파라미터 확인하기
+        $ gedit paramEx.sh
+        -- 작성 --
+            #!/bin/sh
+            echo "실행파일 이름은 <$0>임"
+            echo "첫번째 파라미터는 <$1>이고, 두번째 파라미터는 <$2>다"
+            echo "전체 파라미터는 <$*>임"
+            exit 0
+        -- 작성 종료 --
+        $ sh paramEx.sh 11 22 33 
+        ==> 각 파라미터에 값 지정 
+        ==> 0번째 파라미터는 파일 본인임
+
+
+
+** if문과 case 문 **
+
+* 기본 if문
+    - [ 조건 ] 안의 각 단어 사이에 공백이 있어야 한다는 것을 주의
+    - 형식 :
+        if [ 조건 ]
+        then
+          참일 경우 실행
+        fi
+    - 비교 : '='는 같은지, '!='는 다른지 비교
+
+    ex) shell script를 통해 if문 작성
+        $ gedit ifEx.sh
+        -- 작성 --
+            #!/bin/sh
+            if [ "test" = "test" ]
+            then
+            echo "true"
+            fi
+            exit 0 
+        -- 작성 종료 --
+        $ sh ifEx.sh 로 실행
+        // "test" = "test" 이기때문에 then 문의 조건 발동 ==> true
+
+
+* if ~ else 문
+    - 참, 거짓인 경우 구분하여 실행
+    - 형식 :
+        if [ 조건 ]
+        then
+          참일 경우 실행
+        else 
+          거짓일 경우 실행
+        fi
+
+    ex) shell script를 통해 if ~ else 문 작성
+        $ gedit ifElseEx.sh
+        -- 작성 --
+            #!/bin/sh
+            if [ "test" != "test" ]
+            then
+            echo "true"
+            else 
+            echo "false"
+            fi
+            exit 0
+        -- 작성 완료 --
+        $ sh ifElseEx.sh 로 실행
+        // 참, 거짓일 경우 나누어서 실행됨 >> false
+
+
+* 조건문의 비교 연산자
+    - 조건문에서는 문자열, 산술 비교가 가능하다
+    - 문자열 비교 
+        -n "문자열"  ==>  문자열이 null 이 아니면 참
+        -z "문자열"  ==>  문자열이 null 이면 참
+    - 산술 비교
+        A -eq B  ==>  A = B ? true : false
+        A -nq B  ==>  A != B ? true : false
+        A -gt B  ==>  A > B ? true : false
+        A -ge B  ==>  A >= B ? true : false
+        A -lt B  ==>  A < B ? true : false
+        A -le B  ==>  A <= B ? true : false
+        !A ==>  A = false ? true : false
+
+    ex )
+        $ gedit ifElseEx2.sh
+        -- 작성 --
+            #!/bin/sh
+            if [ 100 -eq 200 ]
+            then
+            echo "100과 200은 같다"
+            else
+            echo "100과 200은 다르다"
+            fi
+            exit 0
+        -- 작성 완료 --
+        $ sh ifElseEx2.sh 로 실행
+        // 100 -eq 200 => false 이므로 '100과 200은 다르다' 출력
+
+
+* 파일 관련 조건
+    -d File : File이 directory 면 true
+    -e File : File이 exist 면 true
+    -f File : File이 File이면 true 
+    -g File : File에 set-group-id가 설정되면 true
+    -r File : File이 readable이면 true
+    -s File : File의 size != 0이면 true
+    -u File : File의 set-user-id가 설정되면 true
+    -w File : File이 wirteable이면 true
+    -x File : File이 executeable이면 true
+
+    ex) 파일 관련 조건 예시 shell script 작성
+        $ gedit ifFileEx.sh 
+            -- 작성 --
+                #!/bin/sh
+                fname=/lib/systemd/system/systemd-sysctl.service
+                if [ -f $fname ]
+                then
+                echo " >> result : true "
+                head -5 $fname
+                else 
+                echo " >> result : false "
+                fi
+                exit 0
+            -- 작성 완료 --
+        $ sh ifFileEx.sh 로 실행
+        // true가 출력되며 headline 의 5줄 출력됨
+
+
+* case ~ esac 문
+    - if문은 참, 거짓 두가지 경우에만 사용됨
+    - 경우의 수가 3 이상일경우 구문이 복잡하기에 사용
+    
+    ex) case ~ esac 문 예시 shell script 작성
+        $ gedit caseEx.sh
+            -- 작성 -- 
+            1    #!/bin/sh
+            2    case "$1" in
+            3    start)
+            4    echo "시작!";;
+            5    stop)
+            6    echo "중지~";;
+            7    restart)
+            8    echo "다시 시작!";;
+            9    *)
+            10    echo "미확인";
+            11    esac
+            12    exit 0
+            -- 작성 완료 --
+        $ sh caseEx.sh stop => 중지~
+        $ sh caseEx.sh start => 시작!
+        $ sh caseEx.sh aaaa => 미확인
+        // 2행: 첫번째 파라미터 변수 값에 따라 3, 5, 7, 9 행 조건으로 분기
+        // 4행: 3행에서 start인 경우 실행, 끝에 세미콜론(;)을 2개 넣어야 함
+        // 11행: case 문의 종료 표시 esac
+
+    ex) case ~ esac 문 예시 shell script 작성2
+        $ gedit caseEx2.sh
+            -- 작성 --
+            1    #!/bin/sh
+            2    echo "실행이 잘 되고 있나요? (y/n)"
+            3    read answer
+            4    case $answer in
+            5    yes|y|Y|Yes|YES)
+            6    echo "다행임";;
+            7    [nN]*)
+            8    echo "안타깝네요 ㅠㅠ";;
+            9    *)
+            10    echo "yes or no로만 입력해주세요"
+            11    exit 1;;
+            12    esac
+            13    exit 0
+            -- 작성 종료 --
+            // read answer를 통해 사용자가 값 입력 가능
+            // 입력한 값이 yes 쪽 값에 있다면 '다행임' 출력
+            // 입력한 값이 no 쪽 값에 있다면 '안타깝네요 ㅠㅠ' 출력
+            // 둘 다 아니라면 'yes or no로만 입력해주세요' 출력 후 비정상 종료(exit 1)
+
+
+
+* and, or 관계 연산자
+    - and의 의미는 -a, &&
+    - or의 의미는 -o, ||
+    - a나 -o는 테스트문([])안에서 사용 가능한데, 이때 괄호 등의 특문 앞에는 \를 넣어야 함
+    - 세미콜론(;)은 앞 뒤 구문을 행으로 분리하는 기능을 지님
+
+    ex) and or shell script 예시
+        $ gedit andorEx.sh
+            -- 작성 --
+                #!/bin/sh
+                echo "보고싶은 파일 명을 입력하세요."
+                read fname
+                if [ -f $fname ] && [ -s $fname ];
+                then
+                head -5 $fname
+                else
+                echo "파일이 없거나, 크기가 0임"
+                fi
+                exit 0
+            -- 작성 완료 --
+        $ sh andorEx.sh 로 실행
+        // if 절의 조건은 $fname이 file 이면서 size가 0 이상일경우
+        // 앞의 예제에서 만든 caseEx2.sh를 파일명으로 입력 >> 5줄의 내용이 나옴
+
+
+    
+** 반복문 **
+
+* for ~ in 문
+    - 변수에 각각의 값을 넣은 후 do 안에 있는 '반복할 문장' 을 실행 => 값의 갯수만큼 반복 실행
+    - 형식 :
+        for 변수 in 값1 값2 값3 ...
+        do
+            반복할 문장
+        done
+
+    ex) $ gedit forEx.sh
+        -- 작성 --
+            #!/bin/sh
+            sum=0
+            for i in 1 2 3 4 5 6 7 8 9 10
+            do
+                sum=`expr $sum + $i`
+            done
+            echo "1부터 10까지의 합 : " $sum
+
+            exit 0
+        -- 작성 완료 --
+        $ sh forEx.sh 실행
+
+    ex) 현재 디렉터리에 있는 shell script file(*.sh)의 이름과 앞 3행 출력하기
+        $ gedit forEx1.sh     
+        -- 작성 --
+            #!/bin/sh
+
+            for fname in $(ls *.sh)
+            do
+                echo " ------ $fname ------ "
+                head -3 $fname
+            done
+
+            exit 0
+        -- 작성 완료 --
+        $ sh forEx1.sh 실행
