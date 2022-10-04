@@ -56,5 +56,7 @@ def main():
     CB_tbl.to_csv('./CoffeeBean.csv', encoding='utf8', mode='w', index=True)
 
 # 메인 함수 실행(실행 시 result 를 테이블 재구성 한 뒤, csv 파일로 저장)
+# 현재 스크립트 파일이 실행되는 상태를 파악하기 위해 사용
+# __name__ = 모듈의 이름이 저장되는 변수
 if __name__ == '__main__':
     main()
